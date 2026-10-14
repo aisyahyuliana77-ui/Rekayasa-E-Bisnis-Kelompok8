@@ -2,22 +2,18 @@
 require_once '../includes/session.php';
 include '../includes/db.php';
 include '../includes/functions.php';
-
 if (isLoggedIn()) {
     header('Location: indexUser.php');
     exit;
 }
-
 $error = '';
 $success = '';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username       = trim($_POST['username'] ?? '');
     $nama           = trim($_POST['nama'] ?? '');
     $alamat         = trim($_POST['alamat'] ?? '');
     $password       = $_POST['password'] ?? '';
     $confirm        = $_POST['confirm_password'] ?? '';
-
     if (!$username || !$nama || !$alamat || !$password || !$confirm) {
         $error = 'Harap isi semua field.';
     } elseif ($password !== $confirm) {
@@ -27,33 +23,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $cek = $pdo->prepare("SELECT id_user FROM user WHERE username = ?");
         $cek->execute([$username]);
-
         if ($cek->fetch()) {
             $error = 'Username sudah digunakan.';
         } else {
             $hash = password_hash($password, PASSWORD_DEFAULT);
-
             $stmt = $pdo->prepare(
                 "INSERT INTO user (username, nama, alamat, password)
                  VALUES (?, ?, ?, ?)"
             );
-
             $stmt->execute([
                 $username,
                 $nama,
                 $alamat,
                 $hash
             ]);
-
             $success = 'Akun berhasil dibuat. Silakan login.';
         }
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta
@@ -66,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             min-height: 100vh;
             background: #f5f1eb;
@@ -78,7 +67,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             place-items: center;
             padding: 30px;
         }
-
         /* =========================================
            CONTAINER UTAMA
         ========================================= */
@@ -94,7 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             box-shadow:
                 0 12px 40px rgba(0, 0, 0, 0.08);
         }
-
         /* =========================================
            BAGIAN GAMBAR
         ========================================= */
@@ -103,12 +90,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             overflow: hidden;
             background: #5b3927;
         }
-
         h2 span {
             color: #c5965a;
             font-weight: 700;
         }
-
         .image-section img {
             width: 100%;
             height: 100%;
@@ -117,10 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             opacity: 0.7;
             display: block;
         }
-
         /*
             INNER SHADOW BAGIAN BAWAH
-
             Shadow masuk ke dalam gambar,
             bukan keluar dari gambar.
         */
@@ -138,7 +121,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     rgba(35, 18, 10, 0.20) 45%,
                     transparent);
         }
-
         /*
             Kalau ingin shadow lebih terasa
             seperti bayangan masuk ke gambar,
@@ -148,7 +130,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             box-shadow:
                 inset 0 -90px 100px -55px rgba(30, 15, 8, 0.85);
         }
-
         /* =========================================
            TEKS DI ATAS GAMBAR
         ========================================= */
@@ -159,7 +140,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             top: 20%;
             color: white;
         }
-
         .image-text h2 {
             font-family: Georgia, serif;
             font-size: 38px;
@@ -168,14 +148,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-shadow:
                 0 2px 8px rgba(0, 0, 0, 0.2);
         }
-
         .image-line {
             width: 55px;
             height: 3px;
             background: white;
             margin-top: 28px;
         }
-
         /* =========================================
            BAGIAN FORM
         ========================================= */
@@ -184,13 +162,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             align-items: start;
             padding: 65px 75px;
         }
-
         .form-wrapper {
             width: 100%;
             max-width: 610px;
             margin: 0 auto;
         }
-
         /* =========================================
            JUDUL
         ========================================= */
@@ -200,7 +176,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #171717;
             margin-bottom: 12px;
         }
-
         .subtitle {
             color: #999;
             font-size: 16px;
@@ -208,7 +183,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-bottom: 32px;
             max-width: 500px;
         }
-
         /* =========================================
            ALERT
         ========================================= */
@@ -219,24 +193,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             line-height: 1.5;
             margin-bottom: 20px;
         }
-
         .alert-danger {
             background: #fff0f0;
             border: 1px solid #eccaca;
             color: #9b3c3c;
         }
-
         .alert-success {
             background: #eef9f0;
             border: 1px solid #c9e5ce;
             color: #397044;
         }
-
         .alert-success a {
             color: #63391f;
             font-weight: 600;
         }
-
         /* =========================================
            FORM
         ========================================= */
@@ -244,18 +214,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             display: grid;
             gap: 16px;
         }
-
         .form-group {
             display: grid;
             gap: 7px;
         }
-
         .form-label {
             font-size: 13px;
             font-weight: 600;
             color: #555;
         }
-
         /* =========================================
            INPUT
         ========================================= */
@@ -270,18 +237,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: #fff;
             transition: .2s;
         }
-
         .input-box:focus-within {
             border-color: #63391f;
             box-shadow:
                 0 0 0 2px rgba(99, 57, 31, 0.07);
         }
-
         .input-icon {
             color: #777;
             font-size: 17px;
         }
-
         .input-box input {
             width: 100%;
             height: 100%;
@@ -291,11 +255,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 14px;
             color: #333;
         }
-
         .input-box input::placeholder {
             color: #aaa;
         }
-
         /* =========================================
            TEXTAREA ALAMAT
         ========================================= */
@@ -310,13 +272,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             min-height: 85px;
             transition: .2s;
         }
-
         .textarea-box:focus-within {
             border-color: #63391f;
             box-shadow:
                 0 0 0 2px rgba(99, 57, 31, 0.07);
         }
-
         .textarea-box textarea {
             width: 100%;
             min-height: 55px;
@@ -328,11 +288,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 14px;
             color: #333;
         }
-
         .textarea-box textarea::placeholder {
             color: #aaa;
         }
-
         /* =========================================
            BUTTON DAFTAR
         ========================================= */
@@ -349,11 +307,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-top: 5px;
             transition: .2s;
         }
-
         .btn-register:hover {
             background: #4e2c19;
         }
-
         /* =========================================
            LINK LOGIN
         ========================================= */
@@ -363,17 +319,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #999;
             font-size: 14px;
         }
-
         .login-link a {
             color: #63391f;
             font-weight: 600;
             text-decoration: none;
         }
-
         .login-link a:hover {
             text-decoration: underline;
         }
-
         /* =========================================
            KEMBALI
         ========================================= */
@@ -382,16 +335,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-top: 14px;
             font-size: 13px;
         }
-
         .back-link a {
             color: #999;
             text-decoration: none;
         }
-
         .back-link a:hover {
             color: #63391f;
         }
-
         /* =========================================
            RESPONSIVE TABLET
         ========================================= */
@@ -399,25 +349,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             body {
                 padding: 15px;
             }
-
             .register-container {
                 grid-template-columns: 1fr;
                 min-height: auto;
             }
-
             .image-section {
                 min-height: 450px;
             }
-
             .form-section {
                 padding: 50px 40px;
             }
-
             .form-wrapper {
                 max-width: 650px;
             }
         }
-
         /* =========================================
            RESPONSIVE HP
         ========================================= */
@@ -425,42 +370,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             body {
                 padding: 0;
             }
-
             .register-container {
                 width: 100%;
                 min-height: 100vh;
                 border-radius: 0;
                 box-shadow: none;
             }
-
             .image-section {
                 min-height: 350px;
             }
-
             .image-text {
                 left: 35px;
                 top: 25%;
             }
-
             .image-text h2 {
                 font-size: 29px;
             }
-
             .form-section {
                 padding: 40px 22px;
             }
-
             .form-wrapper h1 {
                 font-size: 30px;
             }
-
             .subtitle {
                 font-size: 14px;
             }
         }
     </style>
 </head>
-
 <body>
     <div class="register-container">
         <!-- =========================================
@@ -613,5 +550,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
     </div>
 </body>
-
 </html>
