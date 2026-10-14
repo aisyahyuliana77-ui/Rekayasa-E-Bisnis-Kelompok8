@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$db   = 'tes';
+$db   = 'hoco';
 $user = 'root';
 $pass = '';
 $charset = 'utf8mb4';
